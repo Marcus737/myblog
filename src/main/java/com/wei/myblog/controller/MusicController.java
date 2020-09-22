@@ -1,5 +1,6 @@
 package com.wei.myblog.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wei.myblog.common.Result;
 import com.wei.myblog.dto.MusicInfo;
 import com.wei.myblog.service.MusicService;
@@ -25,7 +26,7 @@ public class MusicController {
         if (songName.equals("")){
             return Result.fail("输入内容不能为空");
         }
-        List<MusicInfo> musicInfo = musicService.getMusicInfo(songName, num);
+         List<MusicInfo> musicInfo = musicService.getMusicInfo(songName, num);
         return Result.succeed(musicInfo);
     }
 }

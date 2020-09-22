@@ -26,7 +26,7 @@ public class MusicService {
     private String getMusicPicUrl = "http://artistpicserver.kuwo.cn/pic.web?"
             + "user=86740104241033&prod=kwplayer_ar_9.0.4.2&corp=kuwo&source=kwplayer_ar_9.0.4.2_hw.apk"
             + "&type=big_pic&pictype=url&content=list"
-            + "&rid=%s&name=%s&filename=&width=1080&height=2232";
+            + "&rid=%s&name=%s&filename=&width=600&height=600";
     
 //    private static String getMusicLrcUrl = "http://m.kuwo.cn/newh5/singles/songinfoandlrc?musicId=%s";
 
@@ -104,4 +104,5 @@ public class MusicService {
         getMusicPic(musicList);
         return musicList;
     }
+
 }
