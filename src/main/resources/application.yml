@@ -1,3 +1,4 @@
+
 spring:
   # 数据库数据源配置
   datasource:
@@ -43,7 +44,7 @@ spring:
 #文件传输配置
 file-info:
   # 文件操作路径
-  basePath: E:/myblog/profile/
+  basePath: E:/myblog/profile #/home/wei/apps/myblog/blogData/profile/
   fileMaxSize: 52428800 # 50 * 1024 * 1024
   filenameMaxLength: 100
   allowedSuffixNames: [".md", ".png", ".jpg", ".jpeg", ".gif"]
@@ -71,4 +72,5 @@ token-config:
 role:
   defaultRoleId: 2
 
-
+server:
+  port: 4567
