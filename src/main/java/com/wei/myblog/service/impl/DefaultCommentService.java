@@ -72,6 +72,8 @@ public class DefaultCommentService implements CommentService {
     @Override
     @Transactional
     public void saveComment(Comment comment, String userId, String articleId) {
+        //设置评论时间
+        comment.setCommentTime(new Timestamp(System.currentTimeMillis()));
 
         commentDao.saveComment(comment);
         /**

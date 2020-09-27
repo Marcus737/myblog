@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -142,6 +143,7 @@ public class DefaultArticleService implements ArticleService {
     @Override
     @Transactional
     public void saveArticle(Article article, List<String> articleLabelIds, MultipartFile articleFile, MultipartFile articleCover) throws IOException {
+        article.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         saveMD(article, articleFile);
         saveCover(article, articleCover);
         /**

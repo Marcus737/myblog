@@ -13,10 +13,4 @@ public class MyblogApplication {
     public static void main(String[] args) {
         SpringApplication.run(MyblogApplication.class, args);
     }
-    @Bean
-    public ConfigurableServletWebServerFactory webServerFactory() {
-        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-        factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> connector.setProperty("relaxedQueryChars", "|{}[]\\"));
-        return factory;
-    }
 }

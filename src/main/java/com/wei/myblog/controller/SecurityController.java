@@ -13,12 +13,15 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.SecureRandom;
 import java.util.Random;
 
 /**
  * 客户端向服务端请求，服务端返回salt，客户端传输的密码为md5(salt+md5(password))
  * 服务端保存的是密码是md5(password)
+ * @author wei
  */
 
 @RestController
@@ -31,7 +34,10 @@ public class SecurityController {
     @Autowired
     UserService userService;
 
-    private static final Integer KEEP_TIME = 60; // salt存放1分钟
+    /**
+     *     salt存放1分钟
+      */
+    private static final Integer KEEP_TIME = 60;
 
     public static final String DIVIDER = "+";
 
@@ -85,12 +91,9 @@ public class SecurityController {
     /**
      * 获取随机盐
      */
-    @GetMapping("/randomSalt")
-    public Result randomSalt(@RequestParam("username") String username){
-        String id = userService.getUserIdByUsername(username);
-        if (id == null){
-            return Result.fail("无此用户");
-        }
+    @PostMapping("/randomSalt")
+    public Result randomSalt(@RequestParam("username") String username) throws UnsupportedEncodingException {
+
         //如果已经存在salt就删除，确保只有一个salt
         if (RedisUtils.hasKey(username)){
             RedisUtils.del(username);
@@ -108,20 +111,22 @@ public class SecurityController {
      * @param response
      * @return
      */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Result login(@RequestParam(value = "username") String username
             , @RequestParam("password") String password
-            , HttpServletResponse response) {
-
-        String isAccess = verifyUser(username, password);
-        if (isAccess != null){
-            return Result.fail(isAccess);
+            , HttpServletResponse response) throws UnsupportedEncodingException {
+        try{
+            String isAccess = verifyUser(username, password);
+            if (isAccess != null){
+                return Result.fail(isAccess);
+            }
+            /**
+             * 登录成功后的其他操作
+             */
+            setToken(username, response);
+        }catch (Exception e){
+            Result.fail("登录失败");
         }
-        /**
-         * 登录成功后的其他操作
-         */
-        setToken(username, response);
-
         return Result.succeed();
     };
 

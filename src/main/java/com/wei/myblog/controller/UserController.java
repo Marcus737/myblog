@@ -5,6 +5,7 @@ import com.wei.myblog.dto.DisplayUser;
 import com.wei.myblog.entity.User;
 import com.wei.myblog.service.UserService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -15,11 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author wei
+ */
 @RestController
 @RequestMapping("/myblog/user")
 public class UserController {
@@ -50,7 +56,6 @@ public class UserController {
         return Result.succeed(userService.listUserByRoleId(roleId));
     }
 
-
     /**
      * 后台管理系统的接口
      * @param begin 开始的下标
@@ -80,8 +85,9 @@ public class UserController {
      * @param username 用户名
      * @return json格式响应
      */
-    @GetMapping("/getUser")
-    public Result getUser(@RequestParam("username") String username){
+    @PostMapping("/getUser")
+    public Result getUser(@RequestParam("username") String username) throws UnsupportedEncodingException {
+        username = URLDecoder.decode(username, "utf-8");
         User user = userService.getUser(username);
         DisplayUser displayUser = new DisplayUser(user);
         return Result.succeed(displayUser);
@@ -92,8 +98,8 @@ public class UserController {
      * @param user 用户信息
      * @return json格式响应
      */
-    @PostMapping("/saveUser")
     @CrossOrigin
+    @PostMapping("/saveUser")
     public Result saveUser(User user, @RequestParam(value = "avatarImg", required = false) MultipartFile avatarImg) throws IOException {
         user.setRegisterTime(new Timestamp(System.currentTimeMillis()));
         user.setLoginTime(new Timestamp(System.currentTimeMillis()));
@@ -109,14 +115,14 @@ public class UserController {
      * @return json格式响应
      */
     @PostMapping("/updateUser")
-    @RequiresRoles("admin")
+    @RequiresRoles(value = {"admin", "predestined"}, logical =  Logical.OR)
     @RequiresAuthentication
     public Result updateUser(User user
-            , @RequestParam(value = "avatar", required = false) MultipartFile avatar) throws IOException {
+            , @RequestParam(value = "avatarImg", required = false) MultipartFile avatarImg) throws IOException {
         if (user.getUserId() == null) {
             return Result.fail("userId不能为空");
         }
-        userService.updateUser(user, avatar);
+        userService.updateUser(user, avatarImg);
         return Result.succeed();
 
     }

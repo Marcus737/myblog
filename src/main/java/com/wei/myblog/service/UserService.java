@@ -62,5 +62,5 @@ public interface UserService {
      * @param user 用户信息
      * @return 跟新是否成功
      */
-    void updateUser(User user, MultipartFile avatar) throws IOException;
+    void updateUser(User user, MultipartFile avatarImg) throws IOException;
 }

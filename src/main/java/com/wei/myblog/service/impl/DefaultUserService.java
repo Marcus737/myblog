@@ -140,7 +140,7 @@ public class DefaultUserService implements UserService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = IllegalArgumentException.class)
     public void saveUser(User user, MultipartFile avatarImg) throws IOException {
         String avatarPath = fileService.upload(avatarImg, fileConfig.getBaseDirAvatar(), fileConfig.getDefaultImgType());
         user.setAvatar(avatarPath);
@@ -160,7 +160,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = IllegalArgumentException.class)
     public void removeUser(String userId) {
 
         /**
@@ -179,9 +179,10 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = IllegalArgumentException.class)
     public void updateUser(User user, MultipartFile avatar) throws IOException {
         if (avatar != null){
+            System.out.println(avatar == null);
             String avatarPath = fileService.upload(avatar, fileConfig.getBaseDirAvatar(), fileConfig.getDefaultImgType());
             user.setAvatar(avatarPath);
         }
