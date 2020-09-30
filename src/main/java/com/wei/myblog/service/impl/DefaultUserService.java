@@ -141,21 +141,13 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional(rollbackFor = IllegalArgumentException.class)
-    public void saveUser(User user, MultipartFile avatarImg) throws IOException {
-        String avatarPath = fileService.upload(avatarImg, fileConfig.getBaseDirAvatar(), fileConfig.getDefaultImgType());
+    public void saveUser(User user, String avatarPath) {
         user.setAvatar(avatarPath);
-        /**
-         * 验证用户的邮箱
-         */
-        if (user.getEmail() != null){
-            VerifyUtils.verifyEmail(user.getEmail());
-        }
         userDao.saveUser(user);
         /**
          *  给用户绑定默认角色
          */
         String userId = userDao.getUserIdByUsername(user.getUsername());
-
         userRoleService.associated(userId, ROLE_ID_PREDESTINED);
     }
 
@@ -180,18 +172,8 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional(rollbackFor = IllegalArgumentException.class)
-    public void updateUser(User user, MultipartFile avatar) throws IOException {
-        if (avatar != null){
-            System.out.println(avatar == null);
-            String avatarPath = fileService.upload(avatar, fileConfig.getBaseDirAvatar(), fileConfig.getDefaultImgType());
-            user.setAvatar(avatarPath);
-        }
-        /**
-         * 验证用户的邮箱
-         */
-        if (user.getEmail() != null){
-            VerifyUtils.verifyEmail(user.getEmail());
-        }
+    public void updateUser(User user, String avatarPath) {
+        user.setAvatar(avatarPath);
         userDao.updateUser(user);
     }
 }

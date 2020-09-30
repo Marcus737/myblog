@@ -50,7 +50,7 @@ public interface UserService {
      * 添加用户信息
      * @param user 用户信息
      */
-    void saveUser(User user, MultipartFile avatarImg) throws IOException;
+    void saveUser(User user, String avatarPath) throws IOException;
 
     /**
      * 删除用户
@@ -62,5 +62,5 @@ public interface UserService {
      * @param user 用户信息
      * @return 跟新是否成功
      */
-    void updateUser(User user, MultipartFile avatarImg) throws IOException;
+    void updateUser(User user, String avatarPath) throws IOException;
 }

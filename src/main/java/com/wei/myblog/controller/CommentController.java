@@ -64,7 +64,6 @@ public class CommentController {
      * @return
      */
     @PostMapping("/saveComment")
-    @RequiresRoles(value = {"admin", "predestined"}, logical =  Logical.OR)
     public Result saveComment(Comment comment
             ,@RequestParam("userId") String userId
             ,@RequestParam("articleId") String articleId){

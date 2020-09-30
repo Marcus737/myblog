@@ -52,16 +52,16 @@ public class MyShiroConfig {
         filterRuleMap.put("/myblog/article/getArticleByTitle", "anon");
         filterRuleMap.put("/myblog/label/listLabels", "anon");
         filterRuleMap.put("/myblog/music/**", "anon");
-        filterRuleMap.put("/myblog/file/download", "anon");
+        filterRuleMap.put("/myblog/file/**", "anon");
         filterRuleMap.put("/myblog/file/uploadAvatar", "anon");
         filterRuleMap.put("/myblog/user/saveUser", "anon");
         filterRuleMap.put("/myblog/security/**", "anon");
         filterRuleMap.put("/myblog/comment/listCommentsByArticleId", "anon");
+        filterRuleMap.put("/myblog/comment/saveComment", "anon");
         filterRuleMap.put("/druid/**", "anon");
         //拦截所有接口
         filterRuleMap.put("/**","jwt");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterRuleMap);
-
         return shiroFilterFactoryBean;
     }
 

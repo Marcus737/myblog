@@ -74,7 +74,6 @@ public class DefaultCommentService implements CommentService {
     public void saveComment(Comment comment, String userId, String articleId) {
         //设置评论时间
         comment.setCommentTime(new Timestamp(System.currentTimeMillis()));
-
         commentDao.saveComment(comment);
         /**
          * 与用户关联

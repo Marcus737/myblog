@@ -70,7 +70,7 @@ public class ArticleController {
     public Result searchArticle(@RequestParam(value = "keyword") String keyword){
         // 去空格
         keyword = keyword.trim();
-        if (keyword.equals("")){
+        if ("".equals(keyword)){
             return Result.fail("输入内容不能为空");
         }
         List<Article> articles = articleService.searchArticleByKeyword(keyword);

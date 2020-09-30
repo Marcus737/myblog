@@ -80,6 +80,7 @@
             <version>1.2.61.sec10</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -88,4 +89,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

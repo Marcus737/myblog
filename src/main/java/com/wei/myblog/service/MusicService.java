@@ -104,5 +104,4 @@ public class MusicService {
         getMusicPic(musicList);
         return musicList;
     }
-
 }

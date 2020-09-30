@@ -27,7 +27,6 @@ public interface PictureDao {
 
     /**
      * 根据图片id删除图片
-     * @param pictureId 图片id
      */
     @Delete("delete from picture where picture_id in (select picture_id from article_picture where article_id = #{articleId})")
     void removePicture(String articleId);

@@ -3,11 +3,10 @@ spring:
   # 数据库数据源配置
   datasource:
     username: root
-    password: QQ6220148
-#    password: never
-#    url: jdbc:mysql://localhost:3306/myblog?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=true
-    url: jdbc:mysql://localhost:3306/myblob?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=true
-
+#    password: QQ6220148
+    password: never
+    url: jdbc:mysql://localhost:3306/myblog?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=true
+#    url: jdbc:mysql://localhost:3306/myblob?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     # druid配置
@@ -47,7 +46,8 @@ spring:
 #文件传输配置
 file-info:
   # 文件操作路径
-  basePath: E:/myblog/profile/ # /home/wei/apps/myblog/blogData/profile/ #
+  basePath: /home/wei/apps/myblog/blogData/profile/
+#  basePath: E:/myblog/profile/
   fileMaxSize: 52428800 # 50 *1 1024 * 1024
   filenameMaxLength: 100
   allowedSuffixNames: [".md", ".png", ".jpg", ".jpeg", ".gif"]
@@ -75,5 +75,7 @@ token-config:
 role:
   defaultRoleId: 2
 
+
 server:
   port: 4567
+

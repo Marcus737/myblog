@@ -4,20 +4,15 @@ import com.wei.myblog.common.Result;
 import com.wei.myblog.dto.DisplayUser;
 import com.wei.myblog.entity.User;
 import com.wei.myblog.service.UserService;
-import org.apache.shiro.SecurityUtils;
+import com.wei.myblog.utils.VerifyUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +21,7 @@ import java.util.Map;
 /**
  * @author wei
  */
+
 @RestController
 @RequestMapping("/myblog/user")
 public class UserController {
@@ -55,6 +51,7 @@ public class UserController {
     public Result listUserByRoleId(@RequestParam("roleId")String roleId){
         return Result.succeed(userService.listUserByRoleId(roleId));
     }
+
 
     /**
      * 后台管理系统的接口
@@ -86,8 +83,8 @@ public class UserController {
      * @return json格式响应
      */
     @PostMapping("/getUser")
-    public Result getUser(@RequestParam("username") String username) throws UnsupportedEncodingException {
-        username = URLDecoder.decode(username, "utf-8");
+    public Result getUser(@RequestParam("username") String username){
+
         User user = userService.getUser(username);
         DisplayUser displayUser = new DisplayUser(user);
         return Result.succeed(displayUser);
@@ -98,13 +95,23 @@ public class UserController {
      * @param user 用户信息
      * @return json格式响应
      */
-    @CrossOrigin
+
     @PostMapping("/saveUser")
-    public Result saveUser(User user, @RequestParam(value = "avatarImg", required = false) MultipartFile avatarImg) throws IOException {
+    public Result saveUser(User user, @RequestParam("avatarPath") String avatarPath) throws IOException {
+        if (user.getEmail() == null){
+            return Result.fail("邮箱不能为空");
+
+        }/**
+         * 验证用户的邮箱
+         */
+        boolean flag = VerifyUtils.verifyEmail(user.getEmail());
+        if (!flag){
+            return Result.fail("邮箱格式不正确");
+        }
         user.setRegisterTime(new Timestamp(System.currentTimeMillis()));
         user.setLoginTime(new Timestamp(System.currentTimeMillis()));
         user.setState(1);
-        userService.saveUser(user, avatarImg);
+        userService.saveUser(user, avatarPath);
         return Result.succeed();
     }
 
@@ -118,13 +125,22 @@ public class UserController {
     @RequiresRoles(value = {"admin", "predestined"}, logical =  Logical.OR)
     @RequiresAuthentication
     public Result updateUser(User user
-            , @RequestParam(value = "avatarImg", required = false) MultipartFile avatarImg) throws IOException {
+            , @RequestParam("avatarPath") String avatarPath) throws IOException {
         if (user.getUserId() == null) {
             return Result.fail("userId不能为空");
         }
-        userService.updateUser(user, avatarImg);
-        return Result.succeed();
+        if (user.getEmail() == null){
+            return Result.fail("邮箱不能为空");
 
+        }/**
+         * 验证用户的邮箱
+         */
+        boolean flag = VerifyUtils.verifyEmail(user.getEmail());
+        if (!flag){
+            return Result.fail("邮箱格式不正确");
+        }
+        userService.updateUser(user, avatarPath);
+        return Result.succeed();
     }
     /**
      * 用户接口/后台接口
